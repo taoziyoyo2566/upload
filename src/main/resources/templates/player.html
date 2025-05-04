@@ -39,21 +39,21 @@
                 </audio>
             </div>
         </div>
-        <div class="file-actions">
-            <div>
-                <h2 th:text="${file.originalFilename}">filename.mp3</h2>
-                <div class="file-meta">
+
+        <div class="file-info-bar d-flex justify-content-between align-items-center flex-wrap mt-3 px-2">
+            <div class="file-name text-truncate">
+                <small th:text="${#strings.abbreviate(file.originalFilename, 120)}" class="text-muted"></small>
+                <div class="file-meta text-muted">
                     <span class="file-size" th:text="${file.size}">1024</span> •
                     <span class="file-date" th:text="${file.uploadTime}">2023-01-01</span>
                 </div>
             </div>
-
-            <div>
-                <a th:href="@{'/api/files/' + ${file.id}}" class="btn btn-secondary">
-                    <i class="fas fa-download"></i> Download
+            <div class="file-buttons d-flex gap-2 mt-2 mt-sm-0">
+                <a th:href="@{'/api/files/' + ${file.id}}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-download me-1"></i> Download
                 </a>
-                <a th:href="@{'/api/files/list'}" class="btn btn-secondary">
-                    <i class="fas fa-list"></i> Back to List
+                <a th:href="@{'/api/files/list'}" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-list me-1"></i> Back to List
                 </a>
             </div>
         </div>

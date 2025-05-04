@@ -32,3 +32,23 @@ video, audio {
     border-radius: var(--border-radius);
 }
 
+.file-info-bar {
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
+.file-name {
+    max-width: 60%;
+    overflow: hidden;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.file-buttons a {
+    min-width: 100px;
+}
