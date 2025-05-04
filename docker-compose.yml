@@ -1,0 +1,21 @@
+services:
+  upload-app:
+    build: .
+    container_name: upload-app
+    ports:
+      - "1080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Backblaze configuration (if needed)
+      - BACKBLAZE_KEY_ID=${BACKBLAZE_KEY_ID:-your_app_key_id}
+      - BACKBLAZE_APP_KEY=${BACKBLAZE_APP_KEY:-your_app_key}
+      - BACKBLAZE_BUCKET_ID=${BACKBLAZE_BUCKET_ID:-your_bucket_id}
+      - BACKBLAZE_BUCKET_NAME=${BACKBLAZE_BUCKET_NAME:-your_bucket_name}
+    volumes:
+      - upload-data:/app/uploads
+      - db-data:/app/filedb
+    restart: unless-stopped
+
+volumes:
+  upload-data:
+  db-data:
