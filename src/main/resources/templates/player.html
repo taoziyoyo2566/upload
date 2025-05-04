@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default}">
-
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,24 +14,7 @@
 <div layout:fragment="content">
 
     <div class="card">
-        <div class="file-actions">
-            <div>
-                <h2 th:text="${file.originalFilename}">filename.mp3</h2>
-                <div class="file-meta">
-                    <span class="file-size" th:text="${file.size}">1024</span> •
-                    <span class="file-date" th:text="${file.uploadTime}">2023-01-01</span>
-                </div>
-            </div>
 
-            <div>
-                <a th:href="@{'/api/files/' + ${file.id}}" class="btn btn-secondary">
-                    <i class="fas fa-download"></i> Download
-                </a>
-                <a th:href="@{'/api/files/list'}" class="btn btn-secondary">
-                    <i class="fas fa-list"></i> Back to List
-                </a>
-            </div>
-        </div>
 
         <div class="player-container">
             <!-- Check if it's a video file -->
@@ -56,6 +37,24 @@
                     <source th:src="@{'/api/editor/stream/' + ${file.id}}" th:type="${file.contentType}">
                     Your browser does not support the audio element.
                 </audio>
+            </div>
+        </div>
+        <div class="file-actions">
+            <div>
+                <h2 th:text="${file.originalFilename}">filename.mp3</h2>
+                <div class="file-meta">
+                    <span class="file-size" th:text="${file.size}">1024</span> •
+                    <span class="file-date" th:text="${file.uploadTime}">2023-01-01</span>
+                </div>
+            </div>
+
+            <div>
+                <a th:href="@{'/api/files/' + ${file.id}}" class="btn btn-secondary">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <a th:href="@{'/api/files/list'}" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> Back to List
+                </a>
             </div>
         </div>
     </div>
