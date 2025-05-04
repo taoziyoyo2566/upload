@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- CodeMirror for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/clike/clike.min.js"></script>
+    <style>
+        .CodeMirror {
+            height: 600px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: var(--border-radius);
+        }
+
+        .editor-container {
+            position: relative;
+        }
+
+        .file-actions {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .save-success {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            animation: fadeInOut 3s forwards;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>File Editor</h1>
+        <p>Edit your text file</p>
+    </div>
+
+    <div class="card">
+        <div class="file-actions">
+            <div>
+                <h2 th:text="${file.originalFilename}">filename.txt</h2>
+                <div class="file-meta">
+                    <span th:text="${file.size + ' bytes'}">1024 bytes</span> •
+                    <span th:text="${file.uploadTime}">2023-01-01</span>
+                </div>
+            </div>
+
+            <div>
+                <button id="saveButton" class="btn">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <a th:href="@{'/api/files/list'}" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> Back to List
+                </a>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <textarea id="codeEditor" th:text="${content}"></textarea>
+        </div>
+
+        <div id="saveSuccess" class="save-success">
+            <i class="fas fa-check-circle"></i> File saved successfully
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+            lineNumbers: true,
+            theme: 'monokai',
+            mode: autoDetectMode(),
+            indentUnit: 4,
+            lineWrapping: true
+        });
+
+        // Auto-detect syntax highlighting mode based on file extension
+        function autoDetectMode() {
+            const filename = document.querySelector('h2').textContent.toLowerCase();
+
+            if (filename.endsWith('.js')) {
+                return 'javascript';
+            } else if (filename.endsWith('.html') || filename.endsWith('.htm')) {
+                return 'htmlmixed';
+            } else if (filename.endsWith('.css')) {
+                return 'css';
+            } else if (filename.endsWith('.py')) {
+                return 'python';
+            } else if (filename.endsWith('.java')) {
+                return 'text/x-java';
+            } else if (filename.endsWith('.c') || filename.endsWith('.cpp') || filename.endsWith('.h')) {
+                return 'text/x-c++src';
+            } else if (filename.endsWith('.json')) {
+                return {name: 'javascript', json: true};
+            } else if (filename.endsWith('.xml')) {
+                return 'xml';
+            } else {
+                return 'text/plain';
+            }
+        }
+
+        // Save button functionality
+        document.getElementById('saveButton').addEventListener('click', function() {
+            // Get editor content
+            const content = editor.getValue();
+
+            // Get file ID from URL
+            const url = window.location.href;
+            const id = url.split('/').pop();
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('content', content);
+
+            // Send AJAX request
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `/api/editor/save/${id}`, true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+
+                    if (response.status === 'success') {
+                        // Show success message
+                        const saveSuccess = document.getElementById('saveSuccess');
+                        saveSuccess.style.display = 'block';
+
+                        // Hide success message after 3 seconds
+                        setTimeout(function() {
+                            saveSuccess.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                } else {
+                    alert('Error saving file. Please try again.');
+                }
+            };
+
+            xhr.onerror = function() {
+                alert('Error saving file. Please check your connection.');
+            };
+
+            xhr.send(formData);
+        });
+    });
+</script>
+</body>
+</html>

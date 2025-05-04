@@ -1,6 +1,6 @@
 // JavaScript for file upload with progress tracking
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const uploadForm = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const uploadArea = document.getElementById('uploadArea');
@@ -50,14 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Handle file selection via input
-    fileInput.addEventListener('change', function () {
+    fileInput.addEventListener('change', function() {
         if (this.files.length > 0) {
             uploadFile(this.files[0]);
         }
     });
 
     // Click on upload area to trigger file input
-    uploadArea.addEventListener('click', function () {
+    uploadArea.addEventListener('click', function() {
         fileInput.click();
     });
 
@@ -73,10 +73,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData();
         formData.append('file', file);
 
+        // Get selected storage type
+        const storageType = document.querySelector('input[name="storageType"]:checked').value;
+        formData.append('useCloudStorage', storageType === 'cloud');
+
         const xhr = new XMLHttpRequest();
 
         // Track upload progress
-        xhr.upload.addEventListener('progress', function (e) {
+        xhr.upload.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
                 const percentComplete = Math.round((e.loaded / e.total) * 100);
                 progressBar.style.width = percentComplete + '%';
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Handle upload completion
-        xhr.addEventListener('load', function () {
+        xhr.addEventListener('load', function() {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
 
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     progressText.textContent = 'Upload Complete!';
 
                     // Redirect to list page after 3 seconds
-                    setTimeout(function () {
+                    setTimeout(function() {
                         window.location.href = '/api/files/list';
                     }, 3000);
                 } else {
@@ -139,9 +143,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Handle errors
-        xhr.addEventListener('error', function () {
-            alert('Upload failed. Please check your connection and try again.');
+        xhr.addEventListener('error', function() {
+            showErrorMessage('Upload failed. Please check your connection and try again.');
         });
+
+        xhr.addEventListener('loadend', function() {
+            if (xhr.status !== 200) {
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    showErrorMessage(errorResponse.message || 'Upload failed. Please try again.');
+                } catch (e) {
+                    // If the response is not valid JSON or doesn't have a message
+                    if (xhr.status === 413) {
+                        showErrorMessage('File size exceeds the maximum allowed limit.');
+                    } else {
+                        showErrorMessage('Upload failed: ' + xhr.statusText);
+                    }
+                }
+            }
+        });
+
+        function showErrorMessage(message) {
+            // Create error message element
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger';
+            errorDiv.innerHTML = `<h4><i class="fas fa-exclamation-circle"></i> Upload Failed</h4>
+                                <p>${message}</p>`;
+
+            // Add it after the progress container
+            progressContainer.parentNode.insertBefore(errorDiv, progressContainer.nextSibling);
+
+            // Reset progress
+            progressBar.style.width = '0%';
+            progressText.textContent = 'Failed';
+
+            // Remove the error message after 5 seconds
+            setTimeout(function() {
+                errorDiv.remove();
+            }, 5000);
+        }
 
         // Send the file
         xhr.open('POST', '/api/files/upload', true);

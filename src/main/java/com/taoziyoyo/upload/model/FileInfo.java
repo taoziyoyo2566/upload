@@ -29,13 +29,12 @@ public class FileInfo {
 
     private LocalDateTime uploadTime;
 
-    public FileInfo(String name, String contentType, String path, Long size, String originalFilename) {
-        this.name = name;
-        this.contentType = contentType;
-        this.path = path;
-        this.size = size;
-        this.originalFilename = originalFilename;
-    }
+    private String storageType; // "local" or "cloud"
+
+    private String cloudFileId; // For cloud storage file ID
+
+    private String downloadUrl; // For cloud storage download URL
+
 
     public FileInfo(String name, String originalFilename, String contentType, String path, Long size) {
         this.name = name;
@@ -44,5 +43,17 @@ public class FileInfo {
         this.path = path;
         this.size = size;
         this.uploadTime = LocalDateTime.now();
+        this.storageType = "local";
+    }
+
+    public FileInfo(String name, String originalFilename, String contentType, Long size, String cloudFileId, String downloadUrl) {
+        this.name = name;
+        this.originalFilename = originalFilename;
+        this.contentType = contentType;
+        this.size = size;
+        this.uploadTime = LocalDateTime.now();
+        this.storageType = "cloud";
+        this.cloudFileId = cloudFileId;
+        this.downloadUrl = downloadUrl;
     }
 }
