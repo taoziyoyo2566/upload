@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>File Upload</h1>
+        <p>Upload your files securely and manage them easily</p>
+    </div>
+
+    <div class="card">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" style="display: none;">
+
+            <div id="uploadArea" class="upload-area">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>Drag & Drop Files Here</h3>
+                <p class="upload-text">Or click to select files</p>
+            </div>
+
+            <div id="progressContainer" style="display: none;">
+                <div class="form-group">
+                    <h4>Upload Progress</h4>
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar" role="progressbar"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span id="progressText">0%</span>
+                        <span id="uploadSpeed">0 B/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                <h4><i class="fas fa-check-circle"></i> Upload Successful!</h4>
+                <p id="uploadTimeInfo"></p>
+                <p>Redirecting to file list in 3 seconds...</p>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Your Files</h2>
+            <a href="/api/files/list" class="btn btn-secondary">
+                <i class="fas fa-list"></i> View All Files
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/upload.js"></script>
+</body>
+</html>

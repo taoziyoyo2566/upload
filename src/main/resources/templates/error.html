@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Error Occurred</h1>
+    </div>
+
+    <div class="card">
+        <div class="text-center" style="text-align: center;">
+            <div style="font-size: 5rem; color: var(--danger-color); margin-bottom: 2rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <h2 th:text="${status} ?: 'Error'">500</h2>
+            <p th:text="${error} ?: 'An unexpected error occurred'">Internal Server Error</p>
+            <p th:text="${message}" th:if="${message}">Error message</p>
+
+            <div style="margin-top: 2rem;">
+                <a href="/" class="btn">
+                    <i class="fas fa-home"></i> Go to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
