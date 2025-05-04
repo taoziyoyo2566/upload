@@ -1,0 +1,34 @@
+.player-container {
+    background-color: #1a1a1a;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+video, audio {
+    width: 100%;
+    border-radius: calc(var(--border-radius) - 4px);
+}
+
+.audio-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.audio-icon {
+    font-size: 7rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.file-info {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.plyr {
+    border-radius: var(--border-radius);
+}
+
