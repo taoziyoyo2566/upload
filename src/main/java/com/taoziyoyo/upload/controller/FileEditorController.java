@@ -102,4 +102,25 @@ public class FileEditorController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileInfo.getOriginalFilename() + "\"")
                 .body(resource);
     }
+
+    @GetMapping("/edit/{id}")
+    public String editFile(@PathVariable Long id, Model model) {
+        Optional<FileInfo> fileInfoOpt = fileService.getFile(id);
+        if (!fileInfoOpt.isPresent()) {
+            return "redirect:/files?error=File+not+found";
+        }
+
+        FileInfo fileInfo = fileInfoOpt.get();
+        model.addAttribute("file", fileInfo);
+
+        if (fileService.isTextFile(fileInfo)) {
+            String content = fileService.getFileContent(fileInfo);
+            model.addAttribute("content", content);
+            return "editor";
+        } else if (fileService.isMediaFile(fileInfo)) {
+            return "player";
+        } else {
+            return "redirect:/download/" + id;
+        }
+    }
 }

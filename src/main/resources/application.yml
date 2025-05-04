@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 200KB
+      max-file-size: 300MB
+      max-request-size: 350MB
+
+  devtools:
+    restart:
+      enabled: true
+      # 监控的路径，默认即可，除非自定义构建路径
+      additional-paths:
+        - src/main/java
+        - src/main/resources/templates
+      exclude: static/**,public/**,resources/**
+
+  web:
+    resources:
+      static-locations:
+        - file:./uploads/
+        - classpath:/static/
+
+  datasource:
+    url: jdbc:h2:file:./filedb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  thymeleaf:
+    cache: false
+
+file:
+  upload-dir: ./uploads
+  text-extensions: txt,md,html,css,js,java,py,c,cpp,h,json,xml,yml,yaml,properties,csv,log
+  media-extensions: mp3,mp4,webm,ogg,wav,avi,mov,flv
+
+backblaze:
+  enabled: false
+  application-key-id: ${BACKBLAZE_KEY_ID:your_app_key_id}
+  application-key: ${BACKBLAZE_APP_KEY:your_app_key}
+  bucket-id: ${BACKBLAZE_BUCKET_ID:your_bucket_id}
+  bucket-name: ${BACKBLAZE_BUCKET_NAME:your_bucket_name}

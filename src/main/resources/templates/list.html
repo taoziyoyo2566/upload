@@ -1,76 +1,68 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/main.css">
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
 <body>
-<div class="container">
-    <div class="header">
-        <h1>File Manager</h1>
-        <p>Manage your uploaded files</p>
-    </div>
-
+<div layout:fragment="content">
     <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>Your Files</h2>
-            <a href="/upload" class="btn">
-                <i class="fas fa-cloud-upload-alt"></i> Upload New File
-            </a>
-        </div>
-
-        <div th:if="${files != null and !files.empty}">
-            <ul class="file-list">
-                <li th:each="file : ${files}" class="file-item" th:data-id="${file.id}">
-                    <div class="file-icon">
-                        <i class="fas fa-file"></i>
-                    </div>
-
-                    <div class="file-info">
-                        <div class="file-name" th:text="${file.originalFilename}">filename.txt</div>
-                        <div class="file-meta">
-                            <span class="file-size" th:text="${file.size}">1024</span> •
-                            <span class="file-date" th:text="${file.uploadTime}">2023-01-01</span>
+        <div class="card-body">
+            <div th:if="${files != null and !files.isEmpty}">
+                <ul class="file-list">
+                    <li th:each="file : ${files}" class="file-item" th:data-id="${file.id}">
+                        <div class="file-icon">
+                            <i class="fas fa-file"></i>
                         </div>
-                    </div>
 
-                    <div class="file-actions">
-                        <a th:href="@{'/api/files/' + ${file.id}}" class="btn btn-secondary" title="Download">
-                            <i class="fas fa-download"></i>
-                        </a>
+                        <div class="file-info">
+                            <div class="file-name" th:text="${file.originalFilename}">filename.txt</div>
+                            <div class="file-meta">
+                                <span class="file-size" th:text="${file.size}">1024</span> •
+                                <span class="file-date" th:text="${file.uploadTime}">2023-01-01</span>
+                            </div>
+                        </div>
 
-                        <a th:href="@{'/api/editor/view/' + ${file.id}}" class="btn btn-secondary" title="View/Edit">
-                            <i class="fas fa-eye"></i>
-                        </a>
+                        <div class="file-actions">
+                            <a th:href="@{'/download/' + ${file.id}}" class="btn btn-secondary" title="Download">
+                                <i class="fas fa-download"></i>
+                            </a>
 
-                        <button class="btn btn-secondary edit-file"
-                                th:data-id="${file.id}"
-                                th:data-name="${file.originalFilename}"
-                                title="Rename">
-                            <i class="fas fa-edit"></i>
-                        </button>
+                            <a th:href="@{'/edit/' + ${file.id}}" class="btn btn-secondary" title="View/Edit">
+                                <i class="fas fa-eye"></i>
+                            </a>
 
-                        <button class="btn btn-danger delete-file"
-                                th:data-id="${file.id}"
-                                th:data-name="${file.originalFilename}"
-                                title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </li>
-            </ul>
-        </div>
+                            <button class="btn btn-secondary edit-file"
+                                    th:data-id="${file.id}"
+                                    th:data-name="${file.originalFilename}"
+                                    title="Rename">
+                                <i class="fas fa-edit"></i>
+                            </button>
 
-        <div th:if="${files == null or files.empty}" class="alert alert-info">
-            <p>No files have been uploaded yet. <a href="/upload">Upload your first file</a>.</p>
+                            <button class="btn btn-danger delete-file"
+                                    th:data-id="${file.id}"
+                                    th:data-name="${file.originalFilename}"
+                                    title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div th:if="${files == null or files.isEmpty}" class="alert alert-info">
+                <p>No files have been uploaded yet. <a href="/upload">Upload your first file</a>.</p>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="/js/main.js"></script>
+<!-- Page-specific scripts -->
+<th:block layout:fragment="scripts">
+    <script>
+        // Page-specific JavaScript can go here
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your existing list.js code
+        });
+    </script>
+</th:block>
 </body>
 </html>

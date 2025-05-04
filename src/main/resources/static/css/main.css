@@ -11,6 +11,24 @@
     --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
     --border-radius: 8px;
     --transition-speed: 0.3s;
+    --bs-primary: var(--primary-color);
+    --bs-secondary: var(--secondary-color);
+    --bs-danger: var(--danger-color);
+    --bs-warning: var(--warning-color);
+    --bs-body-bg: var(--background-color);
+    --bs-body-color: var(--text-color);
+    --bs-border-radius: var(--border-radius);
+}
+
+/* Make Bootstrap buttons match your styling */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #3367d6;
+    border-color: #3367d6;
 }
 
 body {
@@ -287,4 +305,53 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     animation: fadeInOut 3s forwards;
+}
+
+/* Header styles */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 0;
+}
+
+.navbar-brand {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--text-color);
+    font-weight: 400;
+    padding: 0.5rem 1rem;
+    transition: color var(--transition-speed);
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* Footer styles */
+.footer {
+    background-color: #f8f9fa;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.footer a {
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: opacity var(--transition-speed);
+}
+
+.footer a:hover {
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* Main content container */
+main {
+    padding: 2rem 0;
+    flex-grow: 1;
 }

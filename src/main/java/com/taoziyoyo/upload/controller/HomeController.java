@@ -17,8 +17,8 @@ public class HomeController {
         return "upload";
     }
 
-    @GetMapping("/list")
-    public String showFilesList(Model model) {
+    @GetMapping("/files")
+    public String redirectToFilesList() {
         return "redirect:/api/files/list";
     }
 }

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,12 +47,7 @@
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>Media Player</h1>
-        <p>Play your media files</p>
-    </div>
+<div layout:fragment="content">
 
     <div class="card">
         <div class="file-actions">
@@ -95,7 +94,8 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/main.js}"></script>
+</th:block>
 
-<script src="/js/main.js"></script>
-</body>
 </html>
