@@ -3,7 +3,7 @@ services:
     build: .
     container_name: upload-app
     ports:
-      - "1080:8080"
+      - "127.0.0.1:690:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       # Backblaze configuration (if needed)
